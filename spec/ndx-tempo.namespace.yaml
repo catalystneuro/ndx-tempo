@@ -1,0 +1,13 @@
+namespaces:
+- author:
+  - Saksham Sharda
+  contact:
+  - sxs1790@case.edu
+  doc: nwb extention for voltage imaging technique called TEMPO
+  name: ndx-tempo
+  schema:
+  - namespace: core
+    neurodata_types:
+    - ElectricalSeries
+  - source: ndx-tempo.extensions.yaml
+  version: 0.1.0
