@@ -1,14 +1,12 @@
-# -*- coding: utf-8 -*-
+from pynwb.spec import NWBDatasetSpec, NWBNamespaceBuilder, NWBGroupSpec, NWBAttributeSpec
+from export_spec import export_spec
 
-import os.path
-
-from pynwb.spec import NWBNamespaceBuilder, export_spec, NWBGroupSpec, NWBAttributeSpec
-# TODO: import the following spec classes as needed
-# from pynwb.spec import NWBDatasetSpec, NWBLinkSpec, NWBDtypeSpec, NWBRefSpec
+name = 'ndx-TEMPO'
+ns_path = name + ".namespace.yaml"
+ext_source = name + ".extensions.yaml"
 
 
 def main():
-    # these arguments were auto-generated from your cookiecutter inputs
     ns_builder = NWBNamespaceBuilder(
         doc='nwb extention for voltage imaging technique called TEMPO',
         name='ndx-tempo',
@@ -17,37 +15,167 @@ def main():
         contact=list(map(str.strip, 'sxs1790@case.edu'.split(',')))
     )
 
-    # TODO: specify the neurodata_types that are used by the extension as well
-    # as in which namespace they are found
-    # this is similar to specifying the Python modules that need to be imported
-    # to use your new data types
-    ns_builder.include_type('ElectricalSeries', namespace='core')
+    ns_builder.include_type('VectorData', namespace='core')
+    ns_builder.include_type('DynamicTable', namespace='core')
+    ns_builder.include_type('Subject', namespace='core')
+    ns_builder.include_type('Device', namespace='core')
 
-    # TODO: define your new data types
-    # see https://pynwb.readthedocs.io/en/latest/extensions.html#extending-nwb
-    # for more information
-    tetrode_series = NWBGroupSpec(
-        neurodata_type_def='TetrodeSeries',
-        neurodata_type_inc='ElectricalSeries',
-        doc=('An extension of ElectricalSeries to include the tetrode ID for '
-             'each time series.'),
-        attributes=[
-            NWBAttributeSpec(
-                name='trode_id',
-                doc='The tetrode ID.',
-                dtype='int32'
-            )
-        ],
+    vector_data_custom = NWBDatasetSpec('A custom VectorData type',
+                                        attributes=[NWBAttributeSpec(
+                                            'Unit', 'specification of unit', 'text')],
+                                        neurodata_type_def='CustomVectorData',
+                                        neurodata_type_inc='VectorData',
+                                        quantity='*')
+
+    # Typedef for laserline
+    laserline_device = NWBGroupSpec(neurodata_type_def='LaserLine',
+                                    neurodata_type_inc='NWBDataInterface',
+                                    doc='Desc of laserline device, part for a TEMPO device',
+                                    quantity='?')
+
+    laserline_device.add_dataset(
+        name='Reference',
+        neurodata_type_inc='CustomVectorData',
+        doc='Reference metadata of the laserline module',
+        dims=('NoOfDevices',),
+        shape=(None),
+        dtype='text',
+        quantity='?'
     )
 
-    # TODO: add all of your new data types to this list
-    new_data_types = [tetrode_series]
+    laserline_device.add_dataset(
+        name='AnalogModulationFrequency',
+        neurodata_type_inc='CustomVectorData',
+        doc='AnalogModulationFrequency metadata of the laserline module',
+        dims=('NoOfDevices',),
+        shape=(None),
+        dtype='float',
+        quantity='?'
+    )
 
-    # export the spec to yaml files in the spec folder
-    output_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..', 'spec'))
-    export_spec(ns_builder, new_data_types, output_dir)
+    laserline_device.add_dataset(
+        name='Power',
+        neurodata_type_inc='CustomVectorData',
+        doc='Power metadata of the laserline module',
+        dims=('NoOfDevices',),
+        shape=(None),
+        dtype='float',
+        quantity='?'
+    )
+
+  # Typedef for PhotoDetector
+    phototector_device = NWBGroupSpec(neurodata_type_def='PhotoDetector',
+                                      neurodata_type_inc='NWBDataInterface',
+                                      doc='Desc of phototector device, part for a TEMPO device',
+                                      quantity='?')
+
+    phototector_device.add_dataset(
+        name='Reference',
+        neurodata_type_inc='CustomVectorData',
+        doc='Reference metadata of the phototector module',
+        dims=('NoOfDevices',),
+        shape=(None),
+        dtype='text',
+        quantity='?'
+    )
+
+    phototector_device.add_dataset(
+        name='Gain',
+        neurodata_type_inc='CustomVectorData',
+        doc='Gain metadata of the phototector module',
+        dims=('NoOfDevices',),
+        shape=(None),
+        dtype='float',
+        quantity='?'
+    )
+
+    phototector_device.add_dataset(
+        name='BandWidth',
+        neurodata_type_inc='CustomVectorData',
+        doc='BandWidth metadata of the phototector module',
+        dims=('NoOfDevices',),
+        shape=(None),
+        dtype='float',
+        quantity='?'
+    )
+
+    # Typedef for LockInAmplifier
+    lockinamp_device = NWBGroupSpec(neurodata_type_def='LockInAmplifier',
+                                    neurodata_type_inc='NWBDataInterface',
+                                    doc='Desc of lockinamplifier device, part for a TEMPO device',
+                                    quantity='?')
+
+    lockinamp_device.add_dataset(
+        name='Reference',
+        neurodata_type_inc='CustomVectorData',
+        doc='Reference metadata of the lockinamp module',
+        shape=(1, 1),
+        dtype='text',
+    )
+
+    lockinamp_device.add_dataset(
+        name='DemodBandwidth',
+        neurodata_type_inc='CustomVectorData',
+        doc='DemodBandwidth metadata of the lockinamp module',
+        shape=(1, 1),
+        dtype='float',
+    )
+
+    lockinamp_device.add_dataset(
+        name='DemodFilterOrder',
+        neurodata_type_inc='CustomVectorData',
+        doc='DemodFilterOrder metadata of the lockinamp module',
+        shape=(1, 1),
+        dtype='float',
+    )
+
+    lockinamp_device.add_dataset(
+        name='Name',
+        neurodata_type_inc='CustomVectorData',
+        doc='Name of the channel of lockinamp',
+        dims=('ChannelNo',),
+        shape=(None),
+        dtype='text',
+        quantity='?'
+    )
+
+    lockinamp_device.add_dataset(
+        name='Offset',
+        neurodata_type_inc='CustomVectorData',
+        doc='Offset for channel of lockinamp',
+        dims=('ChannelNo',),
+        shape=(None),
+        dtype='float',
+        quantity='?'
+    )
+
+    lockinamp_device.add_dataset(
+        name='Gain',
+        neurodata_type_inc='CustomVectorData',
+        doc='Gain for channel of lockinamp',
+        dims=('ChannelNo',),
+        shape=(None),
+        dtype='float',
+        quantity='?'
+    )
+
+    tempo_device = NWBGroupSpec(neurodata_type_def='TEMPO',
+                                neurodata_type_inc='NWBDataInterface',
+                                doc='Datatype for a TEMPO device',
+                                quantity='*',
+                                attributes=[NWBAttributeSpec(
+                                    name='NoOfModules',
+                                    doc='the number of electronic modules with this acquisition system',
+                                    dtype='float',
+                                    required=True)],
+                                groups=[laserline_device,
+                                        phototector_device,
+                                        lockinamp_device]
+                                )
+
+    new_data_types = [tempo_device]
+    export_spec(ns_builder, new_data_types)
 
 
 if __name__ == "__main__":
-    # usage: python create_extension_spec.py
     main()

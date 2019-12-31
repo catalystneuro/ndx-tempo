@@ -1,8 +1,127 @@
 groups:
-- neurodata_type_def: TetrodeSeries
-  neurodata_type_inc: ElectricalSeries
-  doc: An extension of ElectricalSeries to include the tetrode ID for each time series.
+- neurodata_type_def: TEMPO
+  neurodata_type_inc: NWBDataInterface
+  doc: Datatype for a TEMPO device
+  quantity: '*'
   attributes:
-  - name: trode_id
-    dtype: int32
-    doc: The tetrode ID.
+  - name: NoOfModules
+    dtype: float
+    doc: the number of electronic modules with this acquisition system
+  groups:
+  - neurodata_type_def: LaserLine
+    neurodata_type_inc: NWBDataInterface
+    doc: Desc of laserline device, part for a TEMPO device
+    quantity: '?'
+    datasets:
+    - name: Reference
+      neurodata_type_inc: CustomVectorData
+      dtype: text
+      dims:
+      - NoOfDevices
+      shape:
+      - null
+      doc: Reference metadata of the laserline module
+      quantity: '?'
+    - name: AnalogModulationFrequency
+      neurodata_type_inc: CustomVectorData
+      dtype: float
+      dims:
+      - NoOfDevices
+      shape:
+      - null
+      doc: AnalogModulationFrequency metadata of the laserline module
+      quantity: '?'
+    - name: Power
+      neurodata_type_inc: CustomVectorData
+      dtype: float
+      dims:
+      - NoOfDevices
+      shape:
+      - null
+      doc: Power metadata of the laserline module
+      quantity: '?'
+  - neurodata_type_def: PhotoDetector
+    neurodata_type_inc: NWBDataInterface
+    doc: Desc of phototector device, part for a TEMPO device
+    quantity: '?'
+    datasets:
+    - name: Reference
+      neurodata_type_inc: CustomVectorData
+      dtype: text
+      dims:
+      - NoOfDevices
+      shape:
+      - null
+      doc: Reference metadata of the phototector module
+      quantity: '?'
+    - name: Gain
+      neurodata_type_inc: CustomVectorData
+      dtype: float
+      dims:
+      - NoOfDevices
+      shape:
+      - null
+      doc: Gain metadata of the phototector module
+      quantity: '?'
+    - name: BandWidth
+      neurodata_type_inc: CustomVectorData
+      dtype: float
+      dims:
+      - NoOfDevices
+      shape:
+      - null
+      doc: BandWidth metadata of the phototector module
+      quantity: '?'
+  - neurodata_type_def: LockInAmplifier
+    neurodata_type_inc: NWBDataInterface
+    doc: Desc of lockinamplifier device, part for a TEMPO device
+    quantity: '?'
+    datasets:
+    - name: Reference
+      neurodata_type_inc: CustomVectorData
+      dtype: text
+      shape:
+      - 1
+      - 1
+      doc: Reference metadata of the lockinamp module
+    - name: DemodBandwidth
+      neurodata_type_inc: CustomVectorData
+      dtype: float
+      shape:
+      - 1
+      - 1
+      doc: DemodBandwidth metadata of the lockinamp module
+    - name: DemodFilterOrder
+      neurodata_type_inc: CustomVectorData
+      dtype: float
+      shape:
+      - 1
+      - 1
+      doc: DemodFilterOrder metadata of the lockinamp module
+    - name: Name
+      neurodata_type_inc: CustomVectorData
+      dtype: text
+      dims:
+      - ChannelNo
+      shape:
+      - null
+      doc: Name of the channel of lockinamp
+      quantity: '?'
+    - name: Offset
+      neurodata_type_inc: CustomVectorData
+      dtype: float
+      dims:
+      - ChannelNo
+      shape:
+      - null
+      doc: Offset for channel of lockinamp
+      quantity: '?'
+    - name: Gain
+      neurodata_type_inc: CustomVectorData
+      dtype: float
+      dims:
+      - ChannelNo
+      shape:
+      - null
+      doc: Gain for channel of lockinamp
+      quantity: '?'
