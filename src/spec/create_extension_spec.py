@@ -23,49 +23,49 @@ def main():
     vector_data_custom = NWBDatasetSpec('A custom VectorData type',
                                         attributes=[NWBAttributeSpec(
                                             'Unit', 'specification of unit', 'text')],
-                                        neurodata_type_def='CustomVectorData',
+                                        neurodata_type_def='VectorMeasurement',
                                         neurodata_type_inc='VectorData',
                                         quantity='*')
 
     # Typedef for laserline
     laserline_device = NWBGroupSpec(neurodata_type_def='LaserLine',
-                                    neurodata_type_inc='NWBDataInterface',
+                                    neurodata_type_inc='DynamicTable',
                                     doc='Desc of laserline device, part for a TEMPO device',
                                     quantity='?')
 
     laserline_device.add_dataset(
         name='Reference',
-        neurodata_type_inc='CustomVectorData',
+        neurodata_type_inc='VectorMeasurement',
         doc='Reference metadata of the laserline module',
-        dims=('NoOfDevices',),
-        shape=(None),
+        dims=('num_devices',),
+        shape=(None,),
         dtype='text',
         quantity='?'
     )
 
     laserline_device.add_dataset(
         name='AnalogModulationFrequency',
-        neurodata_type_inc='CustomVectorData',
+        neurodata_type_inc='VectorMeasurement',
         doc='AnalogModulationFrequency metadata of the laserline module',
-        dims=('NoOfDevices',),
+        dims=('num_devices',),
         shape=(None),
         dtype='float',
         quantity='?'
     )
 
     laserline_device.add_dataset(
-        name='Power',
-        neurodata_type_inc='CustomVectorData',
+        name='power',
+        neurodata_type_inc='VectorMeasurement',
         doc='Power metadata of the laserline module',
-        dims=('NoOfDevices',),
-        shape=(None),
+        dims=('num_devices',),
+        shape=(None,),
         dtype='float',
         quantity='?'
     )
 
   # Typedef for PhotoDetector
     phototector_device = NWBGroupSpec(neurodata_type_def='PhotoDetector',
-                                      neurodata_type_inc='NWBDataInterface',
+                                      neurodata_type_inc='DynamicTable',
                                       doc='Desc of phototector device, part for a TEMPO device',
                                       quantity='?')
 
@@ -80,21 +80,21 @@ def main():
     )
 
     phototector_device.add_dataset(
-        name='Gain',
-        neurodata_type_inc='CustomVectorData',
+        name='gain',
+        neurodata_type_inc='VectorMeasurement',
         doc='Gain metadata of the phototector module',
-        dims=('NoOfDevices',),
-        shape=(None),
+        dims=('num_devices',),
+        shape=(None,),
         dtype='float',
         quantity='?'
     )
 
     phototector_device.add_dataset(
-        name='BandWidth',
-        neurodata_type_inc='CustomVectorData',
+        name='bandwidth',
+        neurodata_type_inc='VectorMeasurement',
         doc='BandWidth metadata of the phototector module',
-        dims=('NoOfDevices',),
-        shape=(None),
+        dims=('num_devices',),
+        shape=(None,),
         dtype='float',
         quantity='?'
     )
@@ -106,10 +106,10 @@ def main():
                                     quantity='?')
 
     lockinamp_device.add_dataset(
-        name='Reference',
-        neurodata_type_inc='CustomVectorData',
+        name='reference',
+        neurodata_type_inc='VectorData',
         doc='Reference metadata of the lockinamp module',
-        shape=(1, 1),
+        shape=(None,),
         dtype='text',
     )
 
@@ -130,11 +130,11 @@ def main():
     )
 
     lockinamp_device.add_dataset(
-        name='Name',
-        neurodata_type_inc='CustomVectorData',
+        name='name',
+        neurodata_type_inc='VectorData',
         doc='Name of the channel of lockinamp',
-        dims=('ChannelNo',),
-        shape=(None),
+        dims=('channel_num',),
+        shape=(None,),
         dtype='text',
         quantity='?'
     )
