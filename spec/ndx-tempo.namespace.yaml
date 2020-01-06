@@ -11,6 +11,7 @@ namespaces:
     - VectorData
     - DynamicTable
     - Subject
+    - NWBDataInterface
     - Device
   - source: ndx-tempo.extensions.yaml
   version: 0.1.0
