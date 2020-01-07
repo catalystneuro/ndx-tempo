@@ -44,10 +44,9 @@ def main():
                                  neurodata_type_inc='VectorData',
                                  )
 
-
     # Typedef for laserline
     laserline_device = NWBGroupSpec(neurodata_type_def='LaserLine',
-                                    neurodata_type_inc='NWBDataInterface',
+                                    neurodata_type_inc='Device',
                                     doc='description of laserline device, part for a TEMPO device',
                                     quantity='*')
 
@@ -78,9 +77,16 @@ def main():
         quantity='?'
     )
 
+    laserline_devices = NWBGroupSpec(neurodata_type_def='LaserLineDevices',
+                                     neurodata_type_inc='NWBDataInterface',
+                                     name='LaserLineDevices',
+                                     doc='A container for dynamic addition of LaserLine devices',
+                                     quantity='?',
+                                     groups=[laserline_device])
+
     # Typedef for PhotoDetector
     phototector_device = NWBGroupSpec(neurodata_type_def='PhotoDetector',
-                                      neurodata_type_inc='NWBDataInterface',
+                                      neurodata_type_inc='Device',
                                       doc='description of phototector device, part for a TEMPO device',
                                       quantity='*')
 
@@ -110,6 +116,13 @@ def main():
         dtype='float32',
         quantity='?'
     )
+
+    phototector_devices = NWBGroupSpec(neurodata_type_def='PhotoDetectorDevices',
+                                       neurodata_type_inc='NWBDataInterface',
+                                       name='PhotoDetectorDevices',
+                                       doc='A container for dynamic addition of PhotoDetector devices',
+                                       quantity='?',
+                                       groups=[phototector_device])
 
     # Typedef for LockInAmplifier
     lockinamp_device = NWBGroupSpec(neurodata_type_def='LockInAmplifier',
@@ -180,14 +193,13 @@ def main():
                                 attributes=[NWBAttributeSpec(
                                     name='no_of_modules',
                                     doc='the number of electronic modules with this acquisition system',
-                                    dtype='float',
+                                    dtype='int',
                                     required=False,
                                     default_value=3)],
-                                groups=[laserline_device,
-                                        phototector_device,
+                                groups=[laserline_devices,
+                                        phototector_devices,
                                         lockinamp_device]
                                 )
-
 
     new_data_types = [measurement, tempo_device]
     export_spec(ns_builder, new_data_types)

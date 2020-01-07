@@ -10,6 +10,7 @@ from pynwb import NWBFile, NWBHDF5IO
 from datetime import datetime
 from dateutil.tz import tzlocal
 from pynwb.device import Device
+from pynwb.file import MultiContainerInterface, NWBContainer
 
 name = 'ndx-tempo'
 
@@ -57,10 +58,47 @@ class LockInAmplifier(DynamicTable):
         call_docval_func(super().__init__, kwargs)
 
 
-TEMPO = get_class('Miniscope', name)
-# nwbfile.add_device([TEMPO(unit='test',name='temp',description='desc')])
-nwbfile.add_device(TEMPO('temp_miniscope'))
-# nwbfile.devices=[TEMPO(name='tempdevice')]
-# nwbfile.add_device(Device('temp_device'))
+Measurement = get_class('Measurement', name)
+LaserLine = get_class('LaserLine', name)
+# LaserLineDevices = get_class('LaserLineDevices', name)
+PhotoDetector = get_class('PhotoDetector', name)
+# PhotoDetectorDevices = get_class('PhotoDetectorDevices', name)
+LockInAmplifier = get_class('LockInAmplifier', name)
+
+
+@register_class('LaserLineDevices', name)
+class LaserLineDevices(MultiContainerInterface):
+
+    __clsconf__ = {
+        'attr': 'laserline devices',
+        'type': LaserLine,
+        'add': 'add_laserline',
+        'get': 'get_laserline',
+        'create': 'create_laserline',
+    }
+
+
+@register_class('PhotoDetectorDevices', name)
+class PhotoDetectorDevices(MultiContainerInterface):
+
+    __clsconf__ = {
+        'attr': 'phototector devices',
+        'type': PhotoDetector,
+        'add': 'add_photodetector',
+        'get': 'get_photodetector',
+        'create': 'create_photodector',
+    }
+
+
+TEMPO = get_class('TEMPO', name)
+
+laserline_device = LaserLine(name='mylaserline1', reference=VectorData('test', 'desc', data=['refval']),
+                             analog_modulation_frequency=Measurement(
+                                 'test2', 'desc', data=[100.0], unit='hz'),
+                             power=Measurement('test3', 'desc', data=[100.0], unit='watt'))
+laserline_devices = LaserLineDevices(laserline_device)
+
+nwbfile.add_device(TEMPO(name='tempo_test'))
+
 with NWBHDF5IO('testingnwbout.nwb', 'w') as io:
     io.write(nwbfile)
