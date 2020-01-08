@@ -8,10 +8,13 @@ namespaces:
   schema:
   - namespace: core
     neurodata_types:
-    - VectorData
-    - DynamicTable
     - Subject
     - NWBDataInterface
+    - NWBContainer
     - Device
+  - namespace: hdmf-common
+    neurodata_types:
+    - VectorData
+    - DynamicTable
   - source: ndx-tempo.extensions.yaml
   version: 0.1.0

@@ -15,10 +15,11 @@ def main():
         contact=list(map(str.strip, 'sxs1790@case.edu'.split(',')))
     )
 
-    ns_builder.include_type('VectorData', namespace='core')
-    ns_builder.include_type('DynamicTable', namespace='core')
+    ns_builder.include_type('VectorData', namespace='hdmf-common')
+    ns_builder.include_type('DynamicTable', namespace='hdmf-common')
     ns_builder.include_type('Subject', namespace='core')
     ns_builder.include_type('NWBDataInterface', namespace='core')
+    ns_builder.include_type('NWBContainer', namespace='core')
     ns_builder.include_type('Device', namespace='core')
 
     measurement = NWBDatasetSpec('Flexible vectordataset with a custom unit/conversion/resolution'
@@ -39,35 +40,41 @@ def main():
                                                       'by unit. COMMENT: E.g., the change in value of the least significant bit, or '
                                                       'a larger number if signal noise is known to be present. If unknown, use -1.0',
                                                       'float32', required=False, default_value=0.0)
-                                 ],
+                                              ],
                                  neurodata_type_def='Measurement',
                                  neurodata_type_inc='VectorData',
                                  )
 
     # Typedef for laserline
     laserline_device = NWBGroupSpec(neurodata_type_def='LaserLine',
-                                    neurodata_type_inc='Device',
+                                    neurodata_type_inc='NWBDataInterface',
                                     doc='description of laserline device, part for a TEMPO device',
                                     attributes=[
-                                        NWBAttributeSpec('analog_modulation_frequency',
-                                                         'analog_modulation_frequency of the laserline module',
-                                                         dtype='text',
-                                                         shape=(2,),
-                                                         required=False,
-                                                         default_value=['None', 'Hz']),
                                         NWBAttributeSpec('reference',
                                                          'reference of the laserline module',
                                                          dtype='text',
                                                          required=False,
-                                                         default_value=None),
-                                        NWBAttributeSpec('power',
-                                                         'power of the laserline module',
-                                                         dtype='text',
-                                                         shape=(2,),
-                                                         required=False,
-                                                         default_value=('None', 'Watt'))
+                                                         default_value=None)
                                     ],
                                     quantity='*')
+
+    laserline_device.add_dataset(
+        name='analog_modulation_frequency',
+        neurodata_type_inc=measurement,
+        doc='analog_modulation_frequency of the laserline module',
+        shape=(1,),
+        dtype='float',
+        quantity='?'
+    )
+
+    laserline_device.add_dataset(
+        name='power',
+        neurodata_type_inc=measurement,
+        doc='power of the laserline module',
+        shape=(1,),
+        dtype='float',
+        quantity='?'
+    )
 
     laserline_devices = NWBGroupSpec(neurodata_type_def='LaserLineDevices',
                                      neurodata_type_inc='NWBDataInterface',
@@ -77,60 +84,69 @@ def main():
                                      groups=[laserline_device])
 
     # Typedef for PhotoDetector
-    phototector_device = NWBGroupSpec(neurodata_type_def='PhotoDetector',
-                                      neurodata_type_inc='Device',
-                                      doc='description of phototector device, part for a TEMPO device',
-                                      attributes=[
-                                          NWBAttributeSpec('gain',
-                                                           'gain of the phototector module',
-                                                           dtype='text',
-                                                           shape=(2,),
-                                                           required=False,
-                                                           default_value=['None', 'V/W']),
-                                          NWBAttributeSpec('reference',
-                                                           'reference of the phototector module',
-                                                           dtype='text',
-                                                           required=False,
-                                                           default_value=None),
-                                          NWBAttributeSpec('bandwidth',
-                                                           'bandwidth of the phototector module',
-                                                           dtype='text',
-                                                           shape=(2,),
-                                                           required=False,
-                                                           default_value=('None', 'Hz'))
-                                      ],
-                                      quantity='*')
+    photodetector_device = NWBGroupSpec(neurodata_type_def='PhotoDetector',
+                                        neurodata_type_inc='NWBDataInterface',
+                                        doc='description of photodetector device, part for a TEMPO device',
+                                        attributes=[
+                                            NWBAttributeSpec('reference',
+                                                             'reference of the photodetector module',
+                                                             dtype='text',
+                                                             required=False,
+                                                             default_value=None)
+                                        ],
+                                        quantity='*')
 
-    phototector_devices = NWBGroupSpec(neurodata_type_def='PhotoDetectorDevices',
-                                       neurodata_type_inc='NWBDataInterface',
-                                       name='phototector_devices',
-                                       doc='A container for dynamic addition of PhotoDetector devices',
-                                       quantity='?',
-                                       groups=[phototector_device])
+    photodetector_device.add_dataset(
+        name='gain',
+        neurodata_type_inc=measurement,
+        doc='gain of the photodetector module',
+        shape=(1,),
+        dtype='float',
+        quantity='?'
+    )
+
+    photodetector_device.add_dataset(
+        name='bandwidth',
+        neurodata_type_inc=measurement,
+        doc='bandwidth metadata of the photodetector module',
+        shape=(1,),
+        dtype='float',
+        quantity='?'
+    )
+
+    photodetector_devices = NWBGroupSpec(neurodata_type_def='PhotoDetectorDevices',
+                                         neurodata_type_inc='NWBDataInterface',
+                                         name='photodetector_devices',
+                                         doc='A container for dynamic addition of PhotoDetector devices',
+                                         quantity='?',
+                                         groups=[photodetector_device])
 
     # Typedef for LockInAmplifier
     lockinamp_device = NWBGroupSpec(neurodata_type_def='LockInAmplifier',
-                                    neurodata_type_inc='NWBDataInterface',
+                                    neurodata_type_inc='DynamicTable',
                                     doc='description of lock_in_amp device, part for a TEMPO device',
                                     attributes=[
                                         NWBAttributeSpec('demodulation_filter_order',
                                                          'demodulation_filter_order of the lockinamp_device module',
-                                                         dtype='int8',
+                                                         dtype='float',
                                                          required=False,
                                                          default_value=-1),
                                         NWBAttributeSpec('reference',
                                                          'reference of the lockinamp_device module',
                                                          dtype='text',
                                                          required=False,
-                                                         default_value=None),
-                                        NWBAttributeSpec('demod_bandwidth',
-                                                         'demod_bandwidth of the lockinamp_device module',
-                                                         dtype='text',
-                                                         shape=(2,),
-                                                         required=False,
-                                                         default_value=('None', 'Hz'))
+                                                         default_value=None)
                                     ],
-                                    quantity='?')
+                                    quantity='*')
+
+    lockinamp_device.add_dataset(
+        name='demod_bandwidth',
+        neurodata_type_inc=measurement,
+        doc='demod_bandwidth of lock_in_amp',
+        shape=(1,),
+        dtype='float',
+        quantity='?'
+    )
 
     lockinamp_device.add_dataset(
         name='name',
@@ -148,7 +164,7 @@ def main():
         doc='offset for channel of lock_in_amp',
         dims=('no_of_channels',),
         shape=(None,),
-        dtype='float32',
+        dtype='float',
         quantity='?'
     )
 
@@ -158,13 +174,13 @@ def main():
         doc='gain for channel of lock_in_amp',
         dims=('no_of_channels',),
         shape=(None,),
-        dtype='int32',
+        dtype='float',
         quantity='?'
     )
 
     lockinamp_devices = NWBGroupSpec(neurodata_type_def='LockInAmplifierDevices',
                                      neurodata_type_inc='NWBDataInterface',
-                                     name='lock_in_amp_devices',
+                                     name='lockinamp_devices',
                                      doc='A container for dynamic addition of LockInAmplifier devices',
                                      quantity='?',
                                      groups=[lockinamp_device])
@@ -179,7 +195,7 @@ def main():
                                     required=False,
                                     default_value=3)],
                                 groups=[laserline_devices,
-                                        phototector_devices,
+                                        photodetector_devices,
                                         lockinamp_devices]
                                 )
 

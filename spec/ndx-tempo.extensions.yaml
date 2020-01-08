@@ -40,78 +40,72 @@ groups:
     quantity: '?'
     groups:
     - neurodata_type_def: LaserLine
-      neurodata_type_inc: Device
+      neurodata_type_inc: NWBDataInterface
       doc: description of laserline device, part for a TEMPO device
       quantity: '*'
       attributes:
-      - name: analog_modulation_frequency
-        dtype: text
-        shape:
-        - 2
-        default_value:
-        - None
-        - Hz
-        doc: analog_modulation_frequency of the laserline module
-        required: false
       - name: reference
         dtype: text
         doc: reference of the laserline module
         required: false
-      - name: power
-        dtype: text
+      datasets:
+      - name: analog_modulation_frequency
+        neurodata_type_inc: Measurement
+        dtype: float
         shape:
-        - 2
-        default_value:
-        - None
-        - Watt
+        - 1
+        doc: analog_modulation_frequency of the laserline module
+        quantity: '?'
+      - name: power
+        neurodata_type_inc: Measurement
+        dtype: float
+        shape:
+        - 1
         doc: power of the laserline module
-        required: false
+        quantity: '?'
   - neurodata_type_def: PhotoDetectorDevices
     neurodata_type_inc: NWBDataInterface
-    name: phototector_devices
+    name: photodetector_devices
     doc: A container for dynamic addition of PhotoDetector devices
     quantity: '?'
     groups:
     - neurodata_type_def: PhotoDetector
-      neurodata_type_inc: Device
-      doc: description of phototector device, part for a TEMPO device
+      neurodata_type_inc: NWBDataInterface
+      doc: description of photodetector device, part for a TEMPO device
       quantity: '*'
       attributes:
-      - name: gain
-        dtype: text
-        shape:
-        - 2
-        default_value:
-        - None
-        - V/W
-        doc: gain of the phototector module
-        required: false
       - name: reference
         dtype: text
-        doc: reference of the phototector module
+        doc: reference of the photodetector module
         required: false
-      - name: bandwidth
-        dtype: text
+      datasets:
+      - name: gain
+        neurodata_type_inc: Measurement
+        dtype: float
         shape:
-        - 2
-        default_value:
-        - None
-        - Hz
-        doc: bandwidth of the phototector module
-        required: false
+        - 1
+        doc: gain of the photodetector module
+        quantity: '?'
+      - name: bandwidth
+        neurodata_type_inc: Measurement
+        dtype: float
+        shape:
+        - 1
+        doc: bandwidth metadata of the photodetector module
+        quantity: '?'
   - neurodata_type_def: LockInAmplifierDevices
     neurodata_type_inc: NWBDataInterface
-    name: lock_in_amp_devices
+    name: lockinamp_devices
     doc: A container for dynamic addition of LockInAmplifier devices
     quantity: '?'
     groups:
     - neurodata_type_def: LockInAmplifier
-      neurodata_type_inc: NWBDataInterface
+      neurodata_type_inc: DynamicTable
       doc: description of lock_in_amp device, part for a TEMPO device
-      quantity: '?'
+      quantity: '*'
       attributes:
       - name: demodulation_filter_order
-        dtype: int8
+        dtype: float
         default_value: -1
         doc: demodulation_filter_order of the lockinamp_device module
         required: false
@@ -119,16 +113,14 @@ groups:
         dtype: text
         doc: reference of the lockinamp_device module
         required: false
-      - name: demod_bandwidth
-        dtype: text
-        shape:
-        - 2
-        default_value:
-        - None
-        - Hz
-        doc: demod_bandwidth of the lockinamp_device module
-        required: false
       datasets:
+      - name: demod_bandwidth
+        neurodata_type_inc: Measurement
+        dtype: float
+        shape:
+        - 1
+        doc: demod_bandwidth of lock_in_amp
+        quantity: '?'
       - name: name
         neurodata_type_inc: VectorData
         dtype: text
@@ -140,7 +132,7 @@ groups:
         quantity: '?'
       - name: offset
         neurodata_type_inc: Measurement
-        dtype: float32
+        dtype: float
         dims:
         - no_of_channels
         shape:
@@ -149,7 +141,7 @@ groups:
         quantity: '?'
       - name: gain
         neurodata_type_inc: VectorData
-        dtype: int32
+        dtype: float
         dims:
         - no_of_channels
         shape:

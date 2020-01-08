@@ -45,6 +45,12 @@ class LockInAmplifier(DynamicTable):
              'default': 'compartments'},
             {'name': 'description', 'type': str, 'doc': 'a description of what is in this table',
              'default': None},
+            {'name': 'demodulation_bandwidth', 'type': 'Measurement',
+             'doc': 'demodulation bandwidth of this device', 'default': None},
+            {'name': 'demodulation_filter_order', 'type': 'float',
+             'doc': 'demodulation_filter_order of this device', 'default': -1.0},
+            {'name': 'reference', 'type': 'text',
+             'doc': 'reference of this device', 'default': None},
             {'name': 'id', 'type': ('array_data', ElementIdentifiers),
              'doc': 'the identifiers for the units stored in this interface', 'default': None},
             {'name': 'columns', 'type': (tuple, list),
@@ -63,7 +69,7 @@ LaserLine = get_class('LaserLine', name)
 # LaserLineDevices = get_class('LaserLineDevices', name)
 PhotoDetector = get_class('PhotoDetector', name)
 # PhotoDetectorDevices = get_class('PhotoDetectorDevices', name)
-LockInAmplifier = get_class('LockInAmplifier', name)
+# LockInAmplifier = get_class('LockInAmplifier', name)
 
 
 @register_class('LaserLineDevices', name)
@@ -82,7 +88,7 @@ class LaserLineDevices(MultiContainerInterface):
 class PhotoDetectorDevices(MultiContainerInterface):
 
     __clsconf__ = {
-        'attr': 'phototector devices',
+        'attr': 'photodetector devices',
         'type': PhotoDetector,
         'add': 'add_photodetector',
         'get': 'get_photodetector',
@@ -104,12 +110,37 @@ class LockInAmplifierDevices(MultiContainerInterface):
 
 TEMPO = get_class('TEMPO', name)
 
-laserline_device = LaserLine(name='mylaserline1', reference='test_ref',
-                             analog_modulation_frequency=['100', 'Hz'])
+laserline_device = LaserLine(name='mylaserline1', reference='test_ref_laserline',
+                             analog_modulation_frequency=Measurement(
+                                 name='None', description='None', unit='Hz', data=[100]),
+                             power=Measurement(name='None', description='None', unit='uW', data=[100]))
 
-laserline_devices = LaserLineDevices(laserline_device)
+laserline_devices_ = LaserLineDevices()
+laserline_devices_.add_laserline(laserline_device)
 
-nwbfile.add_device(TEMPO(name='tempo_test', laserline_devices=laserline_devices))
+photodetector_device = PhotoDetector(name='myphotodetector1', reference='test_ref_photodetector',
+                                     gain=Measurement(name='None', description='None',
+                                                      unit='Hz', data=[1]),
+                                     bandwidth=Measurement(name='None', description='None', unit='uW', data=[50]))
+
+photodetector_devices_ = PhotoDetectorDevices()
+photodetector_devices_.add_photodetector(photodetector_device)
+
+lockinamp_device = LockInAmplifier(name='mylockinamp')
+lockinamp_devices_ = LockInAmplifierDevices()
+lockinamp_devices_.add_lockinamp(lockinamp_device)
+
+nwbfile.add_device(TEMPO(name='tempo_test',
+                         laserline_devices=laserline_devices_,
+                         photodetector_devices=photodetector_devices_,
+                         lockinamp_devices=lockinamp_devices_)
+                   )
+nwbfile.add_analysis(laserline_device)
+nwbfile.add_analysis(photodetector_device)
+pmod = nwbfile.create_processing_module('module_name', 'desc')
+pmod.add_container(laserline_device)
+pmod.add_container(photodetector_device)
+pmod.add_container(lockinamp_device)
 
 with NWBHDF5IO('testingnwbout.nwb', 'w') as io:
     io.write(nwbfile)
