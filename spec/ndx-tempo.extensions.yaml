@@ -35,7 +35,7 @@ groups:
   groups:
   - neurodata_type_def: LaserLineDevices
     neurodata_type_inc: NWBDataInterface
-    name: LaserLineDevices
+    name: laserline_devices
     doc: A container for dynamic addition of LaserLine devices
     quantity: '?'
     groups:
@@ -43,31 +43,32 @@ groups:
       neurodata_type_inc: Device
       doc: description of laserline device, part for a TEMPO device
       quantity: '*'
-      datasets:
-      - name: reference
-        neurodata_type_inc: VectorData
+      attributes:
+      - name: analog_modulation_frequency
         dtype: text
         shape:
-        - 1
-        doc: reference metadata of the laserline module
-        quantity: '?'
-      - name: analog_modulation_frequency
-        neurodata_type_inc: Measurement
-        dtype: float32
-        shape:
-        - 1
+        - 2
+        default_value:
+        - None
+        - Hz
         doc: analog_modulation_frequency of the laserline module
-        quantity: '?'
+        required: false
+      - name: reference
+        dtype: text
+        doc: reference of the laserline module
+        required: false
       - name: power
-        neurodata_type_inc: Measurement
-        dtype: float32
+        dtype: text
         shape:
-        - 1
+        - 2
+        default_value:
+        - None
+        - Watt
         doc: power of the laserline module
-        quantity: '?'
+        required: false
   - neurodata_type_def: PhotoDetectorDevices
     neurodata_type_inc: NWBDataInterface
-    name: PhotoDetectorDevices
+    name: phototector_devices
     doc: A container for dynamic addition of PhotoDetector devices
     quantity: '?'
     groups:
@@ -75,78 +76,83 @@ groups:
       neurodata_type_inc: Device
       doc: description of phototector device, part for a TEMPO device
       quantity: '*'
-      datasets:
-      - name: reference
-        neurodata_type_inc: VectorData
+      attributes:
+      - name: gain
         dtype: text
         shape:
-        - 1
-        doc: reference of the phototector module
-        quantity: '?'
-      - name: gain
-        neurodata_type_inc: Measurement
-        dtype: int32
-        shape:
-        - 1
+        - 2
+        default_value:
+        - None
+        - V/W
         doc: gain of the phototector module
-        quantity: '?'
+        required: false
+      - name: reference
+        dtype: text
+        doc: reference of the phototector module
+        required: false
       - name: bandwidth
+        dtype: text
+        shape:
+        - 2
+        default_value:
+        - None
+        - Hz
+        doc: bandwidth of the phototector module
+        required: false
+  - neurodata_type_def: LockInAmplifierDevices
+    neurodata_type_inc: NWBDataInterface
+    name: lock_in_amp_devices
+    doc: A container for dynamic addition of LockInAmplifier devices
+    quantity: '?'
+    groups:
+    - neurodata_type_def: LockInAmplifier
+      neurodata_type_inc: NWBDataInterface
+      doc: description of lock_in_amp device, part for a TEMPO device
+      quantity: '?'
+      attributes:
+      - name: demodulation_filter_order
+        dtype: int8
+        default_value: -1
+        doc: demodulation_filter_order of the lockinamp_device module
+        required: false
+      - name: reference
+        dtype: text
+        doc: reference of the lockinamp_device module
+        required: false
+      - name: demod_bandwidth
+        dtype: text
+        shape:
+        - 2
+        default_value:
+        - None
+        - Hz
+        doc: demod_bandwidth of the lockinamp_device module
+        required: false
+      datasets:
+      - name: name
+        neurodata_type_inc: VectorData
+        dtype: text
+        dims:
+        - no_of_channels
+        shape:
+        - null
+        doc: name of the channel of lock_in_amp
+        quantity: '?'
+      - name: offset
         neurodata_type_inc: Measurement
         dtype: float32
+        dims:
+        - no_of_channels
         shape:
-        - 1
-        doc: bandwidth metadata of the phototector module
+        - null
+        doc: offset for channel of lock_in_amp
         quantity: '?'
-  - neurodata_type_def: LockInAmplifier
-    neurodata_type_inc: DynamicTable
-    doc: description of lock_in_amp device, part for a TEMPO device
-    quantity: '?'
-    datasets:
-    - name: reference
-      neurodata_type_inc: VectorData
-      dtype: text
-      shape:
-      - 1
-      doc: reference metadata of the lock_in_amp module
-      quantity: '?'
-    - name: demod_bandwidth
-      neurodata_type_inc: Measurement
-      dtype: float32
-      shape:
-      - 1
-      doc: demodulation bandwidth metadata of the lock_in_amp module
-      quantity: '?'
-    - name: demodulation_filter_order
-      neurodata_type_inc: VectorData
-      dtype: int8
-      shape:
-      - 1
-      doc: demodulation filter order metadata of the lock_in_amp module
-      quantity: '?'
-    - name: name
-      neurodata_type_inc: VectorData
-      dtype: text
-      dims:
-      - no_of_channels
-      shape:
-      - null
-      doc: name of the channel of lock_in_amp
-      quantity: '?'
-    - name: offset
-      neurodata_type_inc: Measurement
-      dtype: float32
-      dims:
-      - no_of_channels
-      shape:
-      - null
-      doc: offset for channel of lock_in_amp
-      quantity: '?'
-    - name: gain
-      neurodata_type_inc: VectorData
-      dtype: int32
-      dims:
-      - no_of_channels
-      shape:
-      - null
-      doc: gain for channel of lock_in_amp
-      quantity: '?'
+      - name: gain
+        neurodata_type_inc: VectorData
+        dtype: int32
+        dims:
+        - no_of_channels
+        shape:
+        - null
+        doc: gain for channel of lock_in_amp
+        quantity: '?'

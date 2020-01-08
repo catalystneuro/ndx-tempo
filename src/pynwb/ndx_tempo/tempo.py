@@ -90,15 +90,26 @@ class PhotoDetectorDevices(MultiContainerInterface):
     }
 
 
+@register_class('LockInAmplifierDevices', name)
+class LockInAmplifierDevices(MultiContainerInterface):
+
+    __clsconf__ = {
+        'attr': 'lockinamp_device devices',
+        'type': LockInAmplifier,
+        'add': 'add_lockinamp',
+        'get': 'get_lockinamp',
+        'create': 'create_lockinamp',
+    }
+
+
 TEMPO = get_class('TEMPO', name)
 
-laserline_device = LaserLine(name='mylaserline1', reference=VectorData('test', 'desc', data=['refval']),
-                             analog_modulation_frequency=Measurement(
-                                 'test2', 'desc', data=[100.0], unit='hz'),
-                             power=Measurement('test3', 'desc', data=[100.0], unit='watt'))
+laserline_device = LaserLine(name='mylaserline1', reference='test_ref',
+                             analog_modulation_frequency=['100', 'Hz'])
+
 laserline_devices = LaserLineDevices(laserline_device)
 
-nwbfile.add_device(TEMPO(name='tempo_test'))
+nwbfile.add_device(TEMPO(name='tempo_test', laserline_devices=laserline_devices))
 
 with NWBHDF5IO('testingnwbout.nwb', 'w') as io:
     io.write(nwbfile)
