@@ -47,7 +47,7 @@ def main():
 
     # Typedef for laserline
     laserline_device = NWBGroupSpec(neurodata_type_def='LaserLine',
-                                    neurodata_type_inc='NWBDataInterface',
+                                    neurodata_type_inc='Device',
                                     doc='description of laserline device, part for a TEMPO device',
                                     attributes=[
                                         NWBAttributeSpec('reference',
@@ -63,7 +63,7 @@ def main():
         neurodata_type_inc=measurement,
         doc='analog_modulation_frequency of the laserline module',
         shape=(1,),
-        dtype='float',
+        dtype='text',
         quantity='?'
     )
 
@@ -85,7 +85,7 @@ def main():
 
     # Typedef for PhotoDetector
     photodetector_device = NWBGroupSpec(neurodata_type_def='PhotoDetector',
-                                        neurodata_type_inc='NWBDataInterface',
+                                        neurodata_type_inc='Device',
                                         doc='description of photodetector device, part for a TEMPO device',
                                         attributes=[
                                             NWBAttributeSpec('reference',
@@ -149,7 +149,7 @@ def main():
     )
 
     lockinamp_device.add_dataset(
-        name='name',
+        name='channel_name',
         neurodata_type_inc='VectorData',
         doc='name of the channel of lock_in_amp',
         dims=('no_of_channels',),

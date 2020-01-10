@@ -40,7 +40,7 @@ groups:
     quantity: '?'
     groups:
     - neurodata_type_def: LaserLine
-      neurodata_type_inc: NWBDataInterface
+      neurodata_type_inc: Device
       doc: description of laserline device, part for a TEMPO device
       quantity: '*'
       attributes:
@@ -51,7 +51,7 @@ groups:
       datasets:
       - name: analog_modulation_frequency
         neurodata_type_inc: Measurement
-        dtype: float
+        dtype: text
         shape:
         - 1
         doc: analog_modulation_frequency of the laserline module
@@ -70,7 +70,7 @@ groups:
     quantity: '?'
     groups:
     - neurodata_type_def: PhotoDetector
-      neurodata_type_inc: NWBDataInterface
+      neurodata_type_inc: Device
       doc: description of photodetector device, part for a TEMPO device
       quantity: '*'
       attributes:
@@ -121,7 +121,7 @@ groups:
         - 1
         doc: demod_bandwidth of lock_in_amp
         quantity: '?'
-      - name: name
+      - name: channel_name
         neurodata_type_inc: VectorData
         dtype: text
         dims:
