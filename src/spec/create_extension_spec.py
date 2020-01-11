@@ -1,6 +1,6 @@
-from pynwb.spec import NWBDatasetSpec, NWBNamespaceBuilder, NWBGroupSpec, NWBAttributeSpec, NWBDtypeSpec
+from pynwb.spec import NWBDatasetSpec, NWBNamespaceBuilder, \
+    NWBGroupSpec, NWBAttributeSpec, NWBDtypeSpec, NWBLinkSpec
 from export_spec import export_spec
-
 name = 'ndx-tempo'
 ns_path = name + ".namespace.yaml"
 ext_source = name + ".extensions.yaml"
@@ -40,7 +40,7 @@ def main():
                                                       'by unit. COMMENT: E.g., the change in value of the least significant bit, or '
                                                       'a larger number if signal noise is known to be present. If unknown, use -1.0',
                                                       'float32', required=False, default_value=0.0)
-                                              ],
+                                 ],
                                  neurodata_type_def='Measurement',
                                  neurodata_type_inc='VectorData',
                                  )
@@ -199,7 +199,162 @@ def main():
                                         lockinamp_devices]
                                 )
 
-    new_data_types = [measurement, tempo_device]
+    # surgical meta-data specification:
+    surgery = NWBGroupSpec(neurodata_type_def='Surgery',
+                           neurodata_type_inc='Subject',
+                           doc='Surgery related meta-data of subject',
+                           name='surgery_data',
+                           attributes=[NWBAttributeSpec(
+                                   name='surgery_date',
+                                   doc='date of surgery',
+                                   dtype='datetime',
+                                   required=False,
+                                   default_value=None),
+                               NWBAttributeSpec(
+                                   name='surgery_notes',
+                                   doc='surgery notes',
+                                   dtype='text',
+                                   required=False,
+                                   default_value=None),
+                               NWBAttributeSpec(
+                                   name='surgery_pharmacology',
+                                   doc='pharmacology data',
+                                   dtype='text',
+                                   required=False,
+                                   default_value=None),
+                               NWBAttributeSpec(
+                                   name='surgery_arget_anatomy',
+                                   doc='target anatomy of the surgery',
+                                   dtype='text',
+                                   required=False,
+                                   default_value=None)],
+                           groups=[
+                                NWBGroupSpec(
+                                   name='implantation',
+                                   doc='implantation related data',
+                                   links=[NWBLinkSpec(name='implantation_device',
+                                                      doc='device implanted during surgery',
+                                                      target_type='Device')],
+                                   attributes=[NWBAttributeSpec(
+                                                  name='ophys_implant_name',
+                                                  doc='optical physiology implant name',
+                                                  dtype='text',
+                                                  required=False,
+                                                  default_value=None),
+                                               NWBAttributeSpec(
+                                                 name='ephys_implant_name',
+                                                 doc='electrophysiology implant name',
+                                                 dtype='text',
+                                                 required=False,
+                                                 default_value=None)],
+                                   quantity='?'),
+                                NWBGroupSpec(
+                                    name='virus_injection',
+                                    doc='virus injection related data',
+                                    attributes=[NWBAttributeSpec(
+                                                   name='virus_injection_id',
+                                                   doc='id of virus injected',
+                                                   dtype='text',
+                                                   required=False,
+                                                   default_value=None),
+                                                NWBAttributeSpec(
+                                                    name='virus_injection_opsin',
+                                                    doc='opsin/protein used',
+                                                    dtype='text',
+                                                    required=False,
+                                                    default_value=None),
+                                                NWBAttributeSpec(
+                                                    name='virus_injection_opsin_l_r',
+                                                    doc='opsin/protein left/right description'
+                                                        'enter \'L\' or \'R\'',
+                                                    dtype='text',
+                                                    required=False,
+                                                    default_value='L/R'),
+                                                NWBAttributeSpec(
+                                                    name='virus_injection_scheme',
+                                                    doc='description of injection scheme eg.'
+                                                    '\'single_bolus\'',
+                                                    dtype='text',
+                                                    required=False,
+                                                    default_value=None),
+                                                NWBAttributeSpec(
+                                                    name='virus_injection_tag',
+                                                    doc='tag for the virus injected',
+                                                    dtype='text',
+                                                    required=False,
+                                                    default_value=None),
+                                                NWBAttributeSpec(
+                                                    name='virus_injection_coordinates',
+                                                    doc='coordinates of virus injection',
+                                                    dtype='float',
+                                                    shape=(3,),
+                                                    required=False,
+                                                    default_value=[0.0, 0.0, 0.0]),
+                                                NWBAttributeSpec(
+                                                    name='virus_injection_coordinates_description',
+                                                    doc='description of coordinates'
+                                                        '\'AP\'/\'ML\'/\'DV\'',
+                                                    dtype='text',
+                                                    required=False,
+                                                    default_value=None),
+                                                NWBAttributeSpec(
+                                                    name='virus_injection_volume',
+                                                    doc='volume of virus injected in ml',
+                                                    dtype='float',
+                                                    required=False,
+                                                    default_value=[-1.0])],
+                                    quantity='?'),
+                                NWBGroupSpec(
+                                    name='ophys_injection',
+                                    doc='optical physiology fluorescence injection metadata',
+                                    attributes=[NWBAttributeSpec(
+                                                    name='ophys_injection_date',
+                                                    doc='date of fluorscent protein injection',
+                                                    dtype='datetime',
+                                                    required=False,
+                                                    default_value=None),
+                                                NWBAttributeSpec(
+                                                    name='ophys_injection_volume',
+                                                    doc='volume of fluorscent protein injected',
+                                                    dtype='float',
+                                                    required=False,
+                                                    default_value=None),
+                                                NWBAttributeSpec(
+                                                    name='ophys_injection_brain_area',
+                                                    doc='brain area of fluorscent protein injection',
+                                                    dtype='text',
+                                                    required=False,
+                                                    default_value=None)
+                                                 ],
+                                    datasets=[NWBDatasetSpec(
+                                                    name='ophys_injection_flr_protein_data',
+                                                    doc='fluorescence protein name and concentration table',
+                                                    neurodata_type_inc='DynamicTable')
+                                              ],
+                                    quantity='?')
+                                    ],
+                           quantity='?')
+
+    subject = NWBGroupSpec(
+                        neurodata_type_def='SubjectComplete',
+                        neurodata_type_inc='Subject',
+                        doc='Mouse metadata used with the TEMPO device',
+                        attributes=[NWBAttributeSpec(
+                                       name='sacrificial_date',
+                                       doc='sacrificial date of the animal ',
+                                       dtype='datetime',
+                                       required=False,
+                                       default_value=None),
+                                    NWBAttributeSpec(
+                                       name='strain',
+                                       doc='strain of the animal',
+                                       dtype='text',
+                                       required=False,
+                                       default_value=None)],
+                        groups=[surgery]
+                           )
+
+    new_data_types = [measurement, tempo_device, subject]
     export_spec(ns_builder, new_data_types)
 
 

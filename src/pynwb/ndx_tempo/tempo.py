@@ -87,3 +87,5 @@ class LockInAmplifierDevices(MultiContainerInterface):
 
 
 TEMPO = get_class('TEMPO', name)
+surgery = get_class('Surgery', name)
+subject = get_class('SubjectComplete', name)

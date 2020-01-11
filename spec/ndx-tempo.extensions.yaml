@@ -148,3 +148,120 @@ groups:
         - null
         doc: gain for channel of lock_in_amp
         quantity: '?'
+- neurodata_type_def: SubjectComplete
+  neurodata_type_inc: Subject
+  doc: Mouse metadata used with the TEMPO device
+  attributes:
+  - name: sacrificial_date
+    dtype: datetime
+    doc: 'sacrificial date of the animal '
+    required: false
+  - name: strain
+    dtype: text
+    doc: strain of the animal
+    required: false
+  groups:
+  - neurodata_type_def: Surgery
+    neurodata_type_inc: Subject
+    name: surgery_data
+    doc: Surgery related meta-data of subject
+    quantity: '?'
+    attributes:
+    - name: surgery_date
+      dtype: datetime
+      doc: date of surgery
+      required: false
+    - name: surgery_notes
+      dtype: text
+      doc: surgery notes
+      required: false
+    - name: surgery_pharmacology
+      dtype: text
+      doc: pharmacology data
+      required: false
+    - name: surgery_arget_anatomy
+      dtype: text
+      doc: target anatomy of the surgery
+      required: false
+    groups:
+    - name: implantation
+      doc: implantation related data
+      quantity: '?'
+      attributes:
+      - name: ophys_implant_name
+        dtype: text
+        doc: optical physiology implant name
+        required: false
+      - name: ephys_implant_name
+        dtype: text
+        doc: electrophysiology implant name
+        required: false
+      links:
+      - name: implantation_device
+        target_type: Device
+        doc: device implanted during surgery
+    - name: virus_injection
+      doc: virus injection related data
+      quantity: '?'
+      attributes:
+      - name: virus_injection_id
+        dtype: text
+        doc: id of virus injected
+        required: false
+      - name: virus_injection_opsin
+        dtype: text
+        doc: opsin/protein used
+        required: false
+      - name: virus_injection_opsin_l_r
+        dtype: text
+        default_value: L/R
+        doc: opsin/protein left/right descriptionenter 'L' or 'R'
+        required: false
+      - name: virus_injection_scheme
+        dtype: text
+        doc: description of injection scheme eg.'single_bolus'
+        required: false
+      - name: virus_injection_tag
+        dtype: text
+        doc: tag for the virus injected
+        required: false
+      - name: virus_injection_coordinates
+        dtype: float
+        shape:
+        - 3
+        default_value:
+        - 0.0
+        - 0.0
+        - 0.0
+        doc: coordinates of virus injection
+        required: false
+      - name: virus_injection_coordinates_description
+        dtype: text
+        doc: description of coordinates'AP'/'ML'/'DV'
+        required: false
+      - name: virus_injection_volume
+        dtype: float
+        default_value:
+        - -1.0
+        doc: volume of virus injected in ml
+        required: false
+    - name: ophys_injection
+      doc: optical physiology fluorescence injection metadata
+      quantity: '?'
+      attributes:
+      - name: ophys_injection_date
+        dtype: datetime
+        doc: date of fluorscent protein injection
+        required: false
+      - name: ophys_injection_volume
+        dtype: float
+        doc: volume of fluorscent protein injected
+        required: false
+      - name: ophys_injection_brain_area
+        dtype: text
+        doc: brain area of fluorscent protein injection
+        required: false
+      datasets:
+      - name: ophys_injection_flr_protein_data
+        neurodata_type_inc: DynamicTable
+        doc: fluorescence protein name and concentration table
