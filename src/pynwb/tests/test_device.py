@@ -12,6 +12,7 @@ sys.path.insert(0, current_dir[:current_dir.rfind(path.sep)])
 from ndx_tempo import *
 sys.path.pop(0)
 
+
 def test_device():
     nwbfile = NWBFile('session description', 'session id', datetime.now(tzlocal()),
                       experimenter='experimenter name',
@@ -92,13 +93,13 @@ def test_surgery():
                       institution='institution name',
                       experiment_description=('experiment description'),
                       session_id='sessionid')
-    surgery_tempo = Surgery(surgery_date=datetime.now(tzlocal()),
+    surgery_tempo = Surgery(surgery_date='0000-0-0',
                             implantation_device='my_implantationdevice',
                             ophys_implant_name='myophysimplantname',
                             virus_injection_id='virusID',
                             virus_injection_opsin_l_r='R',
-                            virus_injection_coordinates=[1.0, 2.0, 3.0],
-                            ophys_injection_date=datetime.now(tzlocal()),
+                            virus_injection_coordinates='[1.0, 2.0, 3.0]',
+                            ophys_injection_date='000-00-00',
                             ophys_injection_flr_protein_data=DynamicTable(
                                                              name='name',
                                                              description='ophys_data',
@@ -115,7 +116,7 @@ def test_surgery():
                             )
     mouse_data_tempo = SubjectComplete(name='mouse_metadata',
                                        surgery_data=surgery_tempo,
-                                       sacrificial_date=datetime.now(tzlocal()),
+                                       sacrificial_date='0000-00-00',
                                        strain='myanimalstrain')
 
     nwbfile.subject = mouse_data_tempo

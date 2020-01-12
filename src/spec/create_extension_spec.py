@@ -200,6 +200,8 @@ def main():
                                 )
 
     # surgical meta-data specification:
+
+
     surgery = NWBGroupSpec(neurodata_type_def='Surgery',
                            neurodata_type_inc='Subject',
                            doc='Surgery related meta-data of subject',
@@ -207,7 +209,7 @@ def main():
                            attributes=[NWBAttributeSpec(
                                    name='surgery_date',
                                    doc='date of surgery',
-                                   dtype='datetime',
+                                   dtype='text',
                                    required=False,
                                    default_value=None),
                                NWBAttributeSpec(
@@ -284,13 +286,6 @@ def main():
                                                     required=False,
                                                     default_value=None),
                                                 NWBAttributeSpec(
-                                                    name='virus_injection_coordinates',
-                                                    doc='coordinates of virus injection',
-                                                    dtype='float',
-                                                    shape=(3,),
-                                                    required=False,
-                                                    default_value=[0.0, 0.0, 0.0]),
-                                                NWBAttributeSpec(
                                                     name='virus_injection_coordinates_description',
                                                     doc='description of coordinates'
                                                         '\'AP\'/\'ML\'/\'DV\'',
@@ -302,7 +297,13 @@ def main():
                                                     doc='volume of virus injected in ml',
                                                     dtype='float',
                                                     required=False,
-                                                    default_value=[-1.0])],
+                                                    default_value=-1.0)],
+                                    datasets=[NWBDatasetSpec(
+                                                    name='virus_injection_coordinates',
+                                                    doc='coordinates of virus injection',
+                                                    dtype='text',
+                                                    quantity='?',
+                                                    default_value=None)],
                                     quantity='?'),
                                 NWBGroupSpec(
                                     name='ophys_injection',
@@ -310,7 +311,7 @@ def main():
                                     attributes=[NWBAttributeSpec(
                                                     name='ophys_injection_date',
                                                     doc='date of fluorscent protein injection',
-                                                    dtype='datetime',
+                                                    dtype='text',
                                                     required=False,
                                                     default_value=None),
                                                 NWBAttributeSpec(
@@ -325,7 +326,7 @@ def main():
                                                     dtype='text',
                                                     required=False,
                                                     default_value=None)
-                                                 ],
+                                                ],
                                     datasets=[NWBDatasetSpec(
                                                     name='ophys_injection_flr_protein_data',
                                                     doc='fluorescence protein name and concentration table',
@@ -337,12 +338,12 @@ def main():
 
     subject = NWBGroupSpec(
                         neurodata_type_def='SubjectComplete',
-                        neurodata_type_inc='Subject',
+                        neurodata_type_inc='Surgery',
                         doc='Mouse metadata used with the TEMPO device',
                         attributes=[NWBAttributeSpec(
                                        name='sacrificial_date',
                                        doc='sacrificial date of the animal ',
-                                       dtype='datetime',
+                                       dtype='text',
                                        required=False,
                                        default_value=None),
                                     NWBAttributeSpec(
@@ -351,10 +352,9 @@ def main():
                                        dtype='text',
                                        required=False,
                                        default_value=None)],
-                        groups=[surgery]
                            )
 
-    new_data_types = [measurement, tempo_device, subject]
+    new_data_types = [measurement, tempo_device, surgery, subject]
     export_spec(ns_builder, new_data_types)
 
 
