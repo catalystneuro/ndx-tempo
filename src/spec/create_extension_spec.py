@@ -53,8 +53,7 @@ def main():
                                         NWBAttributeSpec('reference',
                                                          'reference of the laserline module',
                                                          dtype='text',
-                                                         required=False,
-                                                         default_value=None)
+                                                         required=False)
                                     ],
                                     quantity='*')
 
@@ -91,8 +90,7 @@ def main():
                                             NWBAttributeSpec('reference',
                                                              'reference of the photodetector module',
                                                              dtype='text',
-                                                             required=False,
-                                                             default_value=None)
+                                                             required=False)
                                         ],
                                         quantity='*')
 
@@ -134,8 +132,7 @@ def main():
                                         NWBAttributeSpec('reference',
                                                          'reference of the lockinamp_device module',
                                                          dtype='text',
-                                                         required=False,
-                                                         default_value=None)
+                                                         required=False)
                                     ],
                                     quantity='*')
 
@@ -210,26 +207,22 @@ def main():
                                    name='surgery_date',
                                    doc='date of surgery',
                                    dtype='text',
-                                   required=False,
-                                   default_value=None),
+                                   required=False),
                                NWBAttributeSpec(
                                    name='surgery_notes',
                                    doc='surgery notes',
                                    dtype='text',
-                                   required=False,
-                                   default_value=None),
+                                   required=False),
                                NWBAttributeSpec(
                                    name='surgery_pharmacology',
                                    doc='pharmacology data',
                                    dtype='text',
-                                   required=False,
-                                   default_value=None),
+                                   required=False),
                                NWBAttributeSpec(
                                    name='surgery_arget_anatomy',
                                    doc='target anatomy of the surgery',
                                    dtype='text',
-                                   required=False,
-                                   default_value=None)],
+                                   required=False)],
                            groups=[
                                 NWBGroupSpec(
                                    name='implantation',
@@ -241,14 +234,12 @@ def main():
                                                   name='ophys_implant_name',
                                                   doc='optical physiology implant name',
                                                   dtype='text',
-                                                  required=False,
-                                                  default_value=None),
+                                                  required=False),
                                                NWBAttributeSpec(
                                                  name='ephys_implant_name',
                                                  doc='electrophysiology implant name',
                                                  dtype='text',
-                                                 required=False,
-                                                 default_value=None)],
+                                                 required=False)],
                                    quantity='?'),
                                 NWBGroupSpec(
                                     name='virus_injection',
@@ -257,14 +248,12 @@ def main():
                                                    name='virus_injection_id',
                                                    doc='id of virus injected',
                                                    dtype='text',
-                                                   required=False,
-                                                   default_value=None),
+                                                   required=False),
                                                 NWBAttributeSpec(
                                                     name='virus_injection_opsin',
                                                     doc='opsin/protein used',
                                                     dtype='text',
-                                                    required=False,
-                                                    default_value=None),
+                                                    required=False),
                                                 NWBAttributeSpec(
                                                     name='virus_injection_opsin_l_r',
                                                     doc='opsin/protein left/right description'
@@ -277,21 +266,18 @@ def main():
                                                     doc='description of injection scheme eg.'
                                                     '\'single_bolus\'',
                                                     dtype='text',
-                                                    required=False,
-                                                    default_value=None),
+                                                    required=False),
                                                 NWBAttributeSpec(
                                                     name='virus_injection_tag',
                                                     doc='tag for the virus injected',
                                                     dtype='text',
-                                                    required=False,
-                                                    default_value=None),
+                                                    required=False),
                                                 NWBAttributeSpec(
                                                     name='virus_injection_coordinates_description',
                                                     doc='description of coordinates'
                                                         '\'AP\'/\'ML\'/\'DV\'',
                                                     dtype='text',
-                                                    required=False,
-                                                    default_value=None),
+                                                    required=False),
                                                 NWBAttributeSpec(
                                                     name='virus_injection_volume',
                                                     doc='volume of virus injected in ml',
@@ -302,8 +288,7 @@ def main():
                                                     name='virus_injection_coordinates',
                                                     doc='coordinates of virus injection',
                                                     dtype='text',
-                                                    quantity='?',
-                                                    default_value=None)],
+                                                    quantity='?')],
                                     quantity='?'),
                                 NWBGroupSpec(
                                     name='ophys_injection',
@@ -312,20 +297,17 @@ def main():
                                                     name='ophys_injection_date',
                                                     doc='date of fluorscent protein injection',
                                                     dtype='text',
-                                                    required=False,
-                                                    default_value=None),
+                                                    required=False),
                                                 NWBAttributeSpec(
                                                     name='ophys_injection_volume',
                                                     doc='volume of fluorscent protein injected',
                                                     dtype='float',
-                                                    required=False,
-                                                    default_value=None),
+                                                    required=False),
                                                 NWBAttributeSpec(
                                                     name='ophys_injection_brain_area',
                                                     doc='brain area of fluorscent protein injection',
                                                     dtype='text',
-                                                    required=False,
-                                                    default_value=None)
+                                                    required=False)
                                                 ],
                                     datasets=[NWBDatasetSpec(
                                                     name='ophys_injection_flr_protein_data',
@@ -344,14 +326,12 @@ def main():
                                        name='sacrificial_date',
                                        doc='sacrificial date of the animal ',
                                        dtype='text',
-                                       required=False,
-                                       default_value=None),
+                                       required=False),
                                     NWBAttributeSpec(
                                        name='strain',
                                        doc='strain of the animal',
                                        dtype='text',
-                                       required=False,
-                                       default_value=None)],
+                                       required=False)],
                            )
 
     new_data_types = [measurement, tempo_device, surgery, subject]
