@@ -1,9 +1,9 @@
 import os
 from pynwb import load_namespaces, get_class
-from pynwb import register_class, docval
-from hdmf.utils import call_docval_func
+from pynwb import register_class
 from pynwb.file import MultiContainerInterface
 from hdmf.common.table import DynamicTable, ElementIdentifiers
+from hdmf.utils import docval, getargs, popargs, call_docval_func, get_docval
 
 name = 'ndx-tempo'
 here = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..', '..'))
@@ -37,16 +37,15 @@ class LockInAmplifier(DynamicTable):
              'doc': 'demodulation_filter_order of this device', 'default': -1.0},
             {'name': 'reference', 'type': str,
              'doc': 'reference of this device', 'default': None},
-            {'name': 'id', 'type': ('array_data', ElementIdentifiers),
-             'doc': 'the identifiers for the units stored in this interface', 'default': None},
-            {'name': 'columns', 'type': (tuple, list),
-             'doc': 'the columns in this table', 'default': None},
-            {'name': 'colnames', 'type': 'array_data', 'doc': 'the names of the columns in this table',
-             'default': None},
+            *get_docval(DynamicTable.__init__, 'id', 'columns', 'colnames')
             )
     def __init__(self, **kwargs):
-        if kwargs.get('description', None) is None:
+        self.demod_bandwidth, self.demodulation_filter_order, self.reference \
+                = popargs('demod_bandwidth', 'demodulation_filter_order', 'reference', kwargs)
+        if kwargs.get('description') is None:
             kwargs['description'] = "meta-data for the LockInAmplifier for TEMPO device"
+        if kwargs.get('name') is None:
+            kwargs['name'] = "lockinamp_device"
         call_docval_func(super().__init__, kwargs)
 
 
@@ -87,5 +86,5 @@ class LockInAmplifierDevices(MultiContainerInterface):
 
 
 TEMPO = get_class('TEMPO', name)
-Surgery = get_class('Surgery', name)
+# Surgery = get_class('Surgery', name)
 Subject = get_class('SubjectComplete', name)
