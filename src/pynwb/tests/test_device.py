@@ -5,11 +5,12 @@ from datetime import datetime
 from pynwb import NWBFile, NWBHDF5IO
 from inspect import getsourcefile
 from hdmf.common.table import VectorData
-import os.path as path
+import os
 import sys
-current_dir = path.dirname(path.abspath(getsourcefile(lambda: 0)))
-sys.path.insert(0, current_dir[:current_dir.rfind(path.sep)])
-from ndx_tempo import *
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'ndx_tempo')))
+# current_dir = path.dirname(path.abspath(getsourcefile(lambda: 0)))
+# sys.path.insert(0, current_dir[:current_dir.rfind(path.sep)])
+from tempo import *
 sys.path.pop(0)
 
 

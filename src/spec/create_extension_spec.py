@@ -198,7 +198,6 @@ def main():
 
     # surgical meta-data specification:
 
-
     surgery = NWBGroupSpec(neurodata_type_def='Surgery',
                            neurodata_type_inc='Subject',
                            doc='Surgery related meta-data of subject',
