@@ -114,13 +114,13 @@ groups:
         doc: reference of the lockinamp_device module
         required: false
       datasets:
-      - name: demod_bandwidth
-        neurodata_type_inc: Measurement
-        dtype: float
-        shape:
-        - 1
-        doc: demod_bandwidth of lock_in_amp
-        quantity: '?'
+#      - name: demod_bandwidth
+#        neurodata_type_inc: VectorData
+#        dtype: float
+#        shape:
+#        - 1
+#        doc: demod_bandwidth of lock_in_amp
+#        quantity: '?'
       - name: channel_name
         neurodata_type_inc: VectorData
         dtype: text

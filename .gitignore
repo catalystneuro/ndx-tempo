@@ -114,3 +114,6 @@ venv.bak/
 
 # nwbfiles:
 **/*.nwb
+
+#pycharm
+.idea/

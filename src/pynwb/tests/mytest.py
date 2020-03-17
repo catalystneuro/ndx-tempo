@@ -8,10 +8,10 @@ from hdmf.common.table import VectorData
 import os
 import sys
 import unittest
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'ndx_tempo')))
-# current_dir = path.dirname(path.abspath(getsourcefile(lambda: 0)))
-# sys.path.insert(0, current_dir[:current_dir.rfind(path.sep)])
-from tempo import *
+# sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'ndx_tempo')))
+# # current_dir = path.dirname(path.abspath(getsourcefile(lambda: 0)))
+# # sys.path.insert(0, current_dir[:current_dir.rfind(path.sep)])
+from ndx_tempo import *
 sys.path.pop(0)
 
 
@@ -43,13 +43,13 @@ photodetector_devices_.add_photodetector(photodetector_device)
 
 lockinamp_device = LockInAmplifier(name='mylockinamp', demodulation_filter_order=10.0,
                                    reference='test_ref',
-                                   demod_bandwidth=Measurement(
-                                       name='None', description='None', unit='Hz', data=[150]),
+                                   # demod_bandwidth=VectorData(
+                                   #     name='None', description='None', data=[150]),
                                    columns=[
                                        VectorData(name='channel_name', description='None',
                                                   data=['name1', 'name2']),
-                                       Measurement(name='offset', description='None',
-                                                   unit='mV', data=[140, 260]),
+                                       VectorData(name='offset', description='None',
+                                                   data=[140, 260]),
                                        VectorData(name='gain', description='None', data=[250, 250])]
                                    )
 lockinamp_devices_ = LockInAmplifierDevices()
